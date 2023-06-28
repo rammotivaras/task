@@ -1,111 +1,127 @@
-import React, { useState } from "react";
+// import React from 'react'
+// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import Home from './pages/Home';
+// import Product from './pages/Product';
+// import Navbar from './pages/Navbar';
+// import './App.css';
+// const App = () => {
+//   return (
+//     <div> 
+//     <Router>
+//     <Navbar/>
+//       <Routes>
+//         <Route path='/home' element={<Home/>}/>
+//         <Route path='/product' element={<Product/>}/>
+//       </Routes>
+//     </Router>
+
+//     </div>
+//   )
+// }
+
+// export default App ; 
+ 
+// import React,{useState} from 'react'
+// import './App.css';
+// import { BrowserRouter as Router} from 'react-router-dom';
+// import Routess from './components/front/routes/Routes';
+// import data from './components/back/data/Data';
+// import Header from './components/front/header/Header';
+// const App = () => { 
+//   const [cartItems, setCartItems] = useState([]);
+
+//   const handleAddProduct = (product) =>{
+//     const productExist = cartItems.find((item)=>item.id === product.id);
+//     if(productExist){
+//       setCartItems(cartItems.map((item)=>item.id === product.id ? 
+//       {...productExist, quantity: productExist.quantity + 1}:item
+//       ));
+//     }else{
+//       setCartItems([...cartItems,{...product,quantity: 1}]);
+//     }
+  
+
+//     }
+//     const handleRemoveProduct = (product) =>{
+//     const productExist = cartItems.find((item)=>item.id === product.id);
+// if(productExist.quantity === 1){
+//   setCartItems.filter((item)=>item.id !== product.id)
+// }else{
+//   setCartItems(cartItems.map((item,i)=>item.id===product.id?{...productExist,quantity:productExist.quantity -1}: item))
+// }
+//     }
+  
+//   const {productItems} = data ; 
+//   return (
+//     <div>
+//     <Router>
+      
+
+//       <Header/>
+//       <Routess productItems={productItems} cartItems={cartItems} handleAddProduct={handleAddProduct} handleRemoveProduct={handleRemoveProduct}/>
+//     </Router>
+//     </div>
+//   )
+// }
+
+// export default App 
+ 
+import React, { useState } from 'react';
 import './App.css';
-function Cart() {
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routess from './components/front/routes/Routes';
+import data from './components/back/data/Data';
+import Header from './components/front/header/Header';
+
+const App = () => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (item) => {
-    const newCartItems = [...cartItems];
-    const productItem = newCartItems.find((i) => i.name === item.name);
-
-    if  (productItem) {
-     productItem.quantity++;
-     productItem.price += item.price;
+  const handleAddProduct = (product) => {
+    const productExist = cartItems.find((item) => item.id === product.id);
+    if (productExist) {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === product.id ? { ...productExist, quantity: productExist.quantity + 1 } : item
+        )
+      );
     } else {
-      newCartItems.push({
-        ...item,
-        quantity: 1,
-      });
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
     }
-    
-
-    setCartItems(newCartItems);
   };
 
-  const incrementPrice = (item) => {
-    const newCartItems = [...cartItems];
-    const productItem = newCartItems.find((i) => i.name === item.name);
-
-    if ( productItem) {
-     productItem.price += item.price;
+  const handleRemoveProduct = (product) => {
+    const productExist = cartItems.find((item) => item.id === product.id);
+    if (productExist.quantity === 1) {
+      setCartItems(cartItems.filter((item) => item.id !== product.id));
+    } else {
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === product.id ? { ...productExist, quantity: productExist.quantity - 1 } : item
+        )
+      );
     }
-
-    setCartItems(newCartItems);
   };
 
-  const decrementPrice = (item) => {
-    const newCartItems = [...cartItems];
-    const productItem = newCartItems.find((i) => i.name === item.name);
+  const { productItems } = data;
 
-    if  (productItem) {
-     productItem.price -= item.price;
-
-      if ( productItem.price < 0) {
-     productItem.price = 0;
-      }
-    }
-
-    setCartItems(newCartItems);
-  };
-
-  const getTotalPrice = () => {
-    return cartItems.reduce((acc, item) => acc + item.price, 0);
+  const handleCartClearence=()=>{
+    setCartItems([]);
   }
 
   return (
-    <div className="container">
-      <h2>Shopping Cart</h2>
-      <ul >
-        {cartItems.map((item, index) => (
-          <li className="count" key={index}>
-    
-            {item.name} - Quantity: {item.quantity}, Price: {item.price}
-            <button className="btn-m1" onClick={() => incrementPrice(item)}>+</button>
-            <button className="btn-m2" onClick={() => decrementPrice(item)}>-</button>
-          </li>
-        ))}
-      </ul>
-      <div>
-        <h3>Products</h3>
-        <div>
-          <img
-            src="./images/image1.jpg"
-            alt="Product 1"
-            width="100"
-            height="100"
-          />
-          <button className="btn-1" onClick={() => addToCart({ price: 1000 })}>
-            Add to Cart
-          </button>
-        </div>
-        <div>
-          <img
-            src="./images/image2.jpg"
-            alt="Product 2"
-            width="100"
-            height="100"
-          />
-          <button className="btn-2" 
-          onClick={() => addToCart({  price: 20})}>
-            Add to Cart
-          </button>
-        </div>
-        <div>
-          <img
-            src="./images/image3.jpg"
-            alt="Product 3"
-            width="100"
-            height="100"
-          />
-          <button className="btn-3" onClick={() => addToCart({price: 300})}>
-            Add to Cart
-          </button>
-        </div>
-      </div>
-      <div className="price">
-        Total Price: {getTotalPrice()}
-      </div>
+    <div>
+      <Router>
+        <Header cartItems={cartItems}/>
+        <Routess
+          productItems={productItems}
+          cartItems={cartItems}
+          handleAddProduct={handleAddProduct}
+          handleRemoveProduct={handleRemoveProduct}
+          handleCartClearence={handleCartClearence}
+        />
+      </Router>
     </div>
   );
-}
+};
 
-export default Cart;
+export default App;
